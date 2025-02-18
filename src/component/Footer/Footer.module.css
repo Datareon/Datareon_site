@@ -1,0 +1,47 @@
+.wrapper{
+    background-color: #1E1E1E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.content{
+    padding: 50px 50px 0px 50px;
+    display: flex;
+    justify-content: start;
+    border-bottom: 1px white solid;
+    margin-bottom: 50px;
+}
+.tel_email{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 70px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.adress{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 70px;
+    font-size: 20px;
+    font-weight: 600;
+}
+a {
+    text-decoration: none;
+    color: white; /* Цвет ссылки */
+    font-weight: bold;
+}
+
+a:hover {
+    color: #9c9c9c;
+}
+.tel{
+    margin-bottom: 20px;
+}
+.title_adr{
+    color: #9c9c9c;
+    margin-bottom: 20px;
+}
