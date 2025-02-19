@@ -49,13 +49,13 @@
     height: 60px;
     position: fixed;
     top: 90%;
-    left: 95%;
+    left: 95vw;
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50px;
-    border: 1px black solid;
+    border: 2px black solid;
 }
 .basket{
     width: 45px;
@@ -64,3 +64,19 @@
 .basketDiv:hover{
     box-shadow: 1px 2px 8px 9px rgba(34, 60, 80, 0.2);
 }
+@media (max-width: 1025px) {
+    .basketDiv{
+        left: 90vw;
+    }
+}
+@media (max-width: 820px) {
+    .basketDiv{
+        left: 90vw;
+    }
+}
+@media (max-width: 600px) {
+    .basketDiv{
+        left: 80vw;
+    }
+}
+

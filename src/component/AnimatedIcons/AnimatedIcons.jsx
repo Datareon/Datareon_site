@@ -11,7 +11,7 @@ import a from './AnimatedIcons.module.css';
 
 const AnimatedIcons = () => {
     return (
-        <div>
+        <div className={a.icons}>
             <img src={img_1} alt="" className={a.img_1}/>
             <img src={img_2} alt="" className={a.img_2}/>
             <img src={img_3} alt="" className={a.img_3}/>

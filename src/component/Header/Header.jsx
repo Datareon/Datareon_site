@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import h from './Header.module.css';
-import img_1 from '../../img/1541506.png';
-import img_2 from '../../img/images.png';
-import img_3 from '../../img/60729.png';
-import img_4 from '../../img/icons8-it-50.png';
-import img_5 from '../../img/Рисунок1.png';
+import auth from '../../img/Рисунок5.png';
 import AnimatedIcons from '../AnimatedIcons/AnimatedIcons';
+import Auth from '../Auth/Auth.jsx';
 
-const Header = () => {
+const Header = ({token, setToken}) => {
+    const [visible, setVisible] = useState(true);
+
+
+    
     return (
         <div className={h.wrapper}>
             <div className={h.text}>
                 Приветствую Вас на тестовом сайте для демонстрации работы Datareon Platform!
             </div>
-            <AnimatedIcons />
+            <AnimatedIcons className={h.icons}/>
+            <div onClick={() => setVisible(true)} className={h.authDiv}>
+                <img src={auth} alt="" className={h.auth} />
+            </div>
+            <Auth 
+                isVisible={visible}
+                onClose={() => setVisible(false)}
+                token={token} 
+                setToken={setToken}
+                />
         </div>
     );
 };

@@ -49,3 +49,40 @@
         transform: scale(1);
     }
 }
+.auth{
+    width: 60px;
+}
+.authDiv{
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    top: 3%;
+    left: 95vw;
+    z-index: 21;
+}
+@media (max-width: 1025px) {
+    .authDiv{
+        left: 90vw;
+    }
+}
+@media (max-width: 820px) {
+    .authDiv{
+        left: 90vw;
+    }
+}
+@media (max-width: 700px) {
+    .text{
+        font-size: 40px;
+    }
+}
+
+
+
+@media (max-width: 400px) {
+    .text{
+        font-size: 30px;
+    }
+    .authDiv{
+        left: 80vw;
+    }
+}

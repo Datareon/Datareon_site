@@ -8,11 +8,12 @@ import Footer from '../src/component/Footer/Footer.jsx'
 
 
 function App() {
+  const [token, setToken] = useState("");
 
   return (
     <div className='main'>
-      <Header/>
-      <Content/>
+      <Header token={token} setToken={setToken}/>
+      <Content token={token} setToken={setToken}/>
       <Footer/>
     </div>
   )

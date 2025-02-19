@@ -9,23 +9,32 @@ import BasketModal from "../BasketModal/BasketModal.jsx";
 
 const { Meta } = Card;
 
-const Content = () => {
+const Content = ({ token }) => {
     const [visibleCards, setVisibleCards] = useState(new Set());
     const [alerts, setAlerts] = useState([]);
-    const [data, setData] = useState([]); 
+    const [data, setData] = useState([]);
     const [counts, setCounts] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisibleCard, setIsModalVisibleCard] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const cardsRef = useRef([]);
 
+    // Загружаем данные каждые 60 секунд
     useEffect(() => {
-        getData();
-    }, []);
+        if (!token) return;
+
+        getData(); // Первоначальная загрузка данных
+
+        const interval = setInterval(() => {
+            getData();
+        }, 30000); // 60 секунд
+
+        return () => clearInterval(interval); // Очищаем интервал при размонтировании компонента
+    }, [token]);
 
     useEffect(() => {
-        if (data.length === 0) return; // Ждем загрузки данных
-    
+        if (data.length === 0) return;
+
         const observer = new IntersectionObserver(
             (entries) => {
                 setVisibleCards((prev) => {
@@ -40,7 +49,7 @@ const Content = () => {
             },
             { threshold: 0.6 }
         );
-    
+
         cardsRef.current.forEach((card) => {
             if (card) observer.observe(card);
         });
@@ -50,23 +59,22 @@ const Content = () => {
                 if (card) observer.unobserve(card);
             });
         };
-    }, [data]); // Запускаем, когда data обновляется
+    }, [data]);
 
     const getData = async () => {
         try {
-            const response = await fetch("http://localhost:3444/getApiData");
-    
+            const response = await fetch("http://localhost:3444/getApiData", {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                }
+            });
+
             if (!response.ok) {
                 throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
             }
-    
-            const contentType = response.headers.get("content-type");
-            if (!contentType || !contentType.includes("application/json")) {
-                throw new Error("Ответ не в формате JSON");
-            }
-    
+
             const jsonData = await response.json();
-    
             if (Array.isArray(jsonData)) {
                 setData(jsonData);
             } else {
@@ -106,10 +114,10 @@ const Content = () => {
                         className={`${c.cards} ${visibleCards.has(index.toString()) ? c.visible : ""}`}
                         ref={(el) => (cardsRef.current[index] = el)}
                     >
-                        <Card 
-                            hoverable 
-                            style={{ width: 240 }} 
-                            cover={<img alt="example" src={image} />}  
+                        <Card
+                            hoverable
+                            style={{ width: 240 }}
+                            cover={<img alt="example" src={image} />}
                             onClick={() => {
                                 setSelectedCard(item);
                                 setIsModalVisibleCard(true);
@@ -129,7 +137,7 @@ const Content = () => {
             <AlertNotification alerts={alerts} />
 
             <div className={c.basketDiv} onClick={() => setIsModalVisible(true)}>
-                <img src={basket} alt="" className={c.basket} />
+                <img src={basket} alt="Корзина" className={c.basket} />
             </div>
 
             <BasketModal
@@ -139,6 +147,7 @@ const Content = () => {
                 updateCount={updateCount}
                 handleAddToCart={handleAddToCart}
                 data={data}
+                token={token}
             />
 
             <CardModal 

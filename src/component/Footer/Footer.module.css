@@ -8,9 +8,10 @@
 .content{
     padding: 50px 50px 0px 50px;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     border-bottom: 1px white solid;
     margin-bottom: 50px;
+    flex-wrap: wrap;
 }
 .tel_email{
     display: flex;
@@ -44,4 +45,14 @@ a:hover {
 .title_adr{
     color: #9c9c9c;
     margin-bottom: 20px;
+}
+@media (max-width: 700px) {
+    .content{
+        padding: 50px 0px 0px 0px;
+    }
+}
+@media (max-width: 600px) {
+    .content{
+        padding: 50px 0px 0px 0px;
+    }
 }
