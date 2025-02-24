@@ -6,6 +6,7 @@ const Auth = ({ isVisible, onClose, setToken, token }) => {
     const [error, setError] = useState(null);
     const [regToken, setRegToken]= useState("");
     const [premKey, setPremKey]= useState("");
+    const [userRole, setUserRole] = useState("");
 
     const getRegToken = async (values) => {
         try {
@@ -61,47 +62,14 @@ const Auth = ({ isVisible, onClose, setToken, token }) => {
             setToken(data.AccessToken);
             message.success("Успешный вход!");
             getRegToken(values);
+            setUserRole(values.username);
+            console.log(userRole);
             onClose();
         } catch (error) {
             setError("Неправильный логин или пароль!");
             console.error("Ошибка авторизации:", error);
         }
     };
-
-    // const handelGetPremKey = async (entity)=>{
-    //     try {
-    //         const response = await fetch("https://localhost:7201/api/credential/credentialUsers/users", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 Accept: "*/*",
-    //                 Authorization: `Bearer ${regToken}`,
-    //             },
-    //             body: JSON.stringify({
-    //                 clusterId: null,
-    //                 comment: values.comment || "",
-    //                 isEnabled: values.isEnabled || false, // Убедимся, что передается булево значение
-    //                 entityId: crypto.randomUUID(), // Генерация GUID
-    //                 name: values.name,
-    //                 description: values.description || "",
-    //                 roles: [], // Исправлено на `description`
-    //                 email: values.email || "",
-    //                 tagsCollection:[],
-    //                 version:0,
-    //             }),
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
-    //         }
-
-    //         message.success("Регистрация успешна!");
-    //         onClose();
-    //     } catch (error) {
-    //         message.error("Ошибка при регистрации!");
-    //         console.error("Ошибка регистрации:", error);
-    //     }
-    // }
 
     const handleRegister = async (values) => {
         try {
@@ -141,7 +109,7 @@ const Auth = ({ isVisible, onClose, setToken, token }) => {
 
     return (
         <Modal title={token ? "Добавление пользователя" : "Авторизация"} open={isVisible} onCancel={onClose} footer={null} width="400px">
-            {token ? (
+            {token && userRole === "Администратор" ? (
                 <Form
                     name="registerForm"
                     layout="vertical"
