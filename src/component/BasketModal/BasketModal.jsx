@@ -8,18 +8,18 @@ const { Meta } = Card;
 const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart, data, token }) => {
     const handleOrderSubmit = async (values) => {
         const orderData = {
-            email: values.email, // Отдельное поле email
+            email: values.email,
             order: Object.keys(counts)
                 .filter((key) => counts[key] > 0)
                 .map((key) => {
-                    const item = data.find((item) => String(item.Код) === key);
-                    return {
+                    const item = data.find((item) => String(item.Идентификатор) === String(key));
+                    return item ? {
                         dummyField: 0,
-                        id: item.Код,
+                        id: String(item.Идентификатор),
                         name: item.Наименование,
                         quantity: counts[key],
-                    };
-                }),
+                    } : null;
+                }).filter(Boolean),
         };
 
         try {
@@ -30,7 +30,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify(orderData), // Отправляем новый формат JSON
+                body: JSON.stringify(orderData),
             });
 
             if (response.ok) {
@@ -61,28 +61,23 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
             width="700px"
         >
             {Object.keys(counts).some((key) => counts[key] > 0) ? (
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    textAlign: 'center'
-                }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: 'center' }}>
                     <div className={b.wrapperModal}>
                         {Object.keys(counts).map((key) => {
                             if (counts[key] > 0) {
-                                const item = data.find((item) => String(item.Код) === key);
-                                return (
-                                    <div key={item.Код} className={b.cardsModal}>
+                                const item = data.find((item) => String(item.Идентификатор) === String(key));
+                                return item ? (
+                                    <div key={String(item.Идентификатор)} className={b.cardsModal}>
                                         <Card hoverable style={{ width: 240 }} cover={<img alt="example" src={image} />}>
                                             <Meta title={item.Наименование} description={item.Наименование} />
                                         </Card>
                                         <div className={b.buttons}>
-                                            <Button onClick={() => updateCount(item.Код, -1)}> - </Button>
-                                            <div className={b.counter}>{counts[item.Код]}</div>
-                                            <Button onClick={() => handleAddToCart(item.Код)}> + </Button>
+                                            <Button onClick={() => updateCount(String(item.Идентификатор), -1)}> - </Button>
+                                            <div className={b.counter}>{counts[String(item.Идентификатор)]}</div>
+                                            <Button onClick={() => handleAddToCart(String(item.Идентификатор))}> + </Button>
                                         </div>
                                     </div>
-                                );
+                                ) : null;
                             }
                             return null;
                         })}
@@ -99,10 +94,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
                             name="email"
                             rules={[{ required: true, type: 'email' }]}
                         >
-                            <Input placeholder="Введите email" style={{
-                                marginTop: '20px',
-                                width: '300px'
-                            }} />
+                            <Input placeholder="Введите email" style={{ marginTop: '20px', width: '300px' }} />
                         </Form.Item>
 
                         <Form.Item>

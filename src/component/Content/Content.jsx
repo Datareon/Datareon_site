@@ -19,17 +19,11 @@ const Content = ({ token }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const cardsRef = useRef([]);
 
-    // Загружаем данные каждые 60 секунд
     useEffect(() => {
         if (!token) return;
-
-        getData(); // Первоначальная загрузка данных
-
-        const interval = setInterval(() => {
-            getData();
-        }, 30000); // 60 секунд
-
-        return () => clearInterval(interval); // Очищаем интервал при размонтировании компонента
+        getData();
+        const interval = setInterval(() => getData(), 30000);
+        return () => clearInterval(interval);
     }, [token]);
 
     useEffect(() => {
@@ -70,14 +64,11 @@ const Content = ({ token }) => {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
-            }
-
+            if (!response.ok) throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
+            
             const jsonData = await response.json();
-            if (Array.isArray(jsonData)) {
-                setData(jsonData);
-            } else {
+            if (Array.isArray(jsonData)) setData(jsonData);
+            else {
                 console.error("Expected array, got:", jsonData);
                 setData([]);
             }
@@ -88,50 +79,52 @@ const Content = ({ token }) => {
     };
 
     const updateCount = (key, change) => {
-        setCounts((prevCounts) => ({
-            ...prevCounts,
-            [key]: Math.max((prevCounts[key] || 0) + change, 0),
-        }));
+        setCounts((prevCounts) => {
+            const updatedCounts = { ...prevCounts };
+            const newCount = (updatedCounts[key] || 0) + change;
+            updatedCounts[key] = Math.max(newCount, 0);
+            return updatedCounts;
+        });
     };
 
     const handleAddToCart = (key) => {
         updateCount(key, 1);
         const id = Date.now();
         setAlerts((prevAlerts) => [...prevAlerts, id]);
-
-        setTimeout(() => {
-            setAlerts((prevAlerts) => prevAlerts.filter((alertId) => alertId !== id));
-        }, 3000);
+        setTimeout(() => setAlerts((prevAlerts) => prevAlerts.filter((alertId) => alertId !== id)), 3000);
     };
 
     return (
         <>
             <div className={c.wrapper}>
-                {data.map((item, index) => (
-                    <div
-                        key={item.Код}
-                        data-index={index}
-                        className={`${c.cards} ${visibleCards.has(index.toString()) ? c.visible : ""}`}
-                        ref={(el) => (cardsRef.current[index] = el)}
-                    >
-                        <Card
-                            hoverable
-                            style={{ width: 240 }}
-                            cover={<img alt="example" src={image} />}
-                            onClick={() => {
-                                setSelectedCard(item);
-                                setIsModalVisibleCard(true);
-                            }}
+                {data.map((item, index) => {
+                    const itemId = String(item.Идентификатор);
+                    return (
+                        <div
+                            key={itemId}
+                            data-index={index}
+                            className={`${c.cards} ${visibleCards.has(index.toString()) ? c.visible : ""}`}
+                            ref={(el) => (cardsRef.current[index] = el)}
                         >
-                            <Meta title={item.Наименование} description={item.Наименование} />
-                        </Card>
-                        <div className={c.buttons}>
-                            <Button onClick={() => updateCount(item.Код, -1)}> - </Button>
-                            <div className={c.counter}>{counts[item.Код] || 0}</div>
-                            <Button onClick={() => handleAddToCart(item.Код)}> + </Button>
+                            <Card
+                                hoverable
+                                style={{ width: 240 }}
+                                cover={<img alt="example" src={image} />}
+                                onClick={() => {
+                                    setSelectedCard(item);
+                                    setIsModalVisibleCard(true);
+                                }}
+                            >
+                                <Meta title={item.Наименование} description={item.Наименование} />
+                            </Card>
+                            <div className={c.buttons}>
+                                <Button onClick={() => updateCount(itemId, -1)}> - </Button>
+                                <div className={c.counter}>{counts[itemId] || 0}</div>
+                                <Button onClick={() => handleAddToCart(itemId)}> + </Button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <AlertNotification alerts={alerts} />

@@ -60,6 +60,12 @@
     left: 95vw;
     z-index: 21;
 }
+
+@media (max-width: 1921px) {
+    .authDiv{
+        left: 93vw;
+    }
+}
 @media (max-width: 1025px) {
     .authDiv{
         left: 90vw;

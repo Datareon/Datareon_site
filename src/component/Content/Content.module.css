@@ -64,6 +64,11 @@
 .basketDiv:hover{
     box-shadow: 1px 2px 8px 9px rgba(34, 60, 80, 0.2);
 }
+@media (max-width: 1921px) {
+    .basketDiv{
+        left: 93vw;
+    }
+}
 @media (max-width: 1025px) {
     .basketDiv{
         left: 90vw;
