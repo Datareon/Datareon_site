@@ -4,4 +4,4 @@
 
 Публикация данного веб-приложения осуществлена через github pages по следующей ссылке:
 
-[Datareon Case](https://glebvas7.github.io/Datareon_site_case/)
+[Datareon Case](https://datareon.github.io/Datareon_site/)
