@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://glebvas7.github.io/Datareon_site_case/",
+  "homepage": "https://datareon.github.io/Datareon_site_case/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
