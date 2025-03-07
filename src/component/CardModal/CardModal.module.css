@@ -1,0 +1,34 @@
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.description{
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    width: 100%;
+}
+.span{
+    color: #36B4D2;
+    margin-right: 20px;
+}
+.price{
+    font-weight: 600;
+    white-space: nowrap;
+}
+.price span{
+    color: #36B4D2;
+    margin: 0;
+}
+.characteristics{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.spanTabl{
+    margin: 0 20px ;
+    color: gray;
+}

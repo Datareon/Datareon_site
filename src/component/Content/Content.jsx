@@ -22,7 +22,7 @@ const Content = ({ token }) => {
     useEffect(() => {
         if (!token) return;
         getData();
-        const interval = setInterval(() => getData(), 30000);
+        const interval = setInterval(() => getData(), 10000);
         return () => clearInterval(interval);
     }, [token]);
 
@@ -115,7 +115,7 @@ const Content = ({ token }) => {
                                     setIsModalVisibleCard(true);
                                 }}
                             >
-                                <Meta title={item.Наименование} description={item.Наименование} />
+                                <Meta title={item.Наименование} description={item.Категория} />
                             </Card>
                             <div className={c.buttons}>
                                 <Button onClick={() => updateCount(itemId, -1)}> - </Button>

@@ -8,21 +8,20 @@ const { Meta } = Card;
 const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart, data, token }) => {
     const handleOrderSubmit = async (values) => {
         const orderData = {
-            email: values.email,
-            order: Object.keys(counts)
+            Заказ: Object.keys(counts)
                 .filter((key) => counts[key] > 0)
                 .map((key) => {
                     const item = data.find((item) => String(item.Идентификатор) === String(key));
                     return item ? {
-                        dummyField: 0,
-                        id: String(item.Идентификатор),
-                        name: item.Наименование,
-                        quantity: counts[key],
+                        Идентификатор: String(item.Идентификатор),
+                        Количество: String(counts[key]),
                     } : null;
                 }).filter(Boolean),
+            Почта: values.email,
         };
 
         try {
+            console.log(JSON.stringify(orderData, null, 2));
             const response = await fetch("http://localhost:3444/sendJson", {
                 method: "POST",
                 headers: {
