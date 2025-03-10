@@ -9,9 +9,12 @@ import img_7 from '../../img/Рисунок3.png';
 import img_8 from '../../img/Рисунок4.png';
 import a from './AnimatedIcons.module.css';
 
+// Компонент AnimatedIcons отвечает за отображение набора анимированных иконок
 const AnimatedIcons = () => {
     return (
+        // Контейнер для всех иконок с общим классом
         <div className={a.icons}>
+            {/* Каждое изображение имеет свой класс для анимации и стилизации */}
             <img src={img_1} alt="" className={a.img_1}/>
             <img src={img_2} alt="" className={a.img_2}/>
             <img src={img_3} alt="" className={a.img_3}/>

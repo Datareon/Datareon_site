@@ -5,8 +5,11 @@ import image from "../../img/imgpsh_2.png";
 
 const { Meta } = Card;
 
+// Компонент BasketModal отвечает за отображение корзины и оформление заказа
 const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart, data, token }) => {
+    //Обработчик отправки заказа
     const handleOrderSubmit = async (values) => {
+        //Формирование заказа
         const orderData = {
             Заказ: Object.keys(counts)
                 .filter((key) => counts[key] > 0)
@@ -19,7 +22,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
                 }).filter(Boolean),
             Почта: values.email,
         };
-
+        //Отправка POST запроса с формированным зказом
         try {
             console.log(JSON.stringify(orderData, null, 2));
             const response = await fetch("http://localhost:3444/sendJson", {
@@ -27,23 +30,22 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
                 headers: {
                     "Accept": "*/*",
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`, //передача токена авторизации в заголовке запроса
                 },
-                body: JSON.stringify(orderData),
+                body: JSON.stringify(orderData), //строка преодбразования в JSON тело сообщения и передача в теле сообщения
             });
 
             if (response.ok) {
-                message.success("Заказ успешно оформлен!");
-                onClose();
+                onClose(); //при успешной отправке, окно закрывается
             } else {
-                message.error("Ошибка при оформлении заказа");
+                console.error("Ошибка при оформлении заказа"); //при возникновении ошибки выводится сообщение в консоль браузера
             }
         } catch (error) {
-            message.error("Ошибка соединения с сервером");
-            console.error("Ошибка:", error);
+            console.error("Ошибка:", error); //при неудачной попытке отправки, выводится сообщени в консоль
         }
     };
 
+    //объект для заполнения обязательного поля
     const validateMessages = {
         required: 'Обязательное поле!',
         types: {
@@ -52,6 +54,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
     };
 
     return (
+        // модальное окно для отображения корзины
         <Modal
             title="Корзина"
             open={isVisible}
@@ -59,6 +62,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
             footer={null}
             width="700px"
         >
+            {/*Отображение выбранных карточек и формы заполнения почты для отправки заказа*/}
             {Object.keys(counts).some((key) => counts[key] > 0) ? (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: 'center' }}>
                     <div className={b.wrapperModal}>
@@ -104,6 +108,7 @@ const BasketModal = ({ isVisible, onClose, counts, updateCount, handleAddToCart,
                     </Form>
                 </div>
             ) : (
+                //если корзина пустая, то выводим сообщение
                 <p>Корзина пуста</p>
             )}
         </Modal>

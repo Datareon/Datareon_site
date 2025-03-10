@@ -2,10 +2,13 @@ import React from 'react';
 import { Modal, Form, Input, Button, Alert, Checkbox } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
+// Компонент Auth отвечает за авторизацию и добавление пользователей
 const Auth = ({ isVisible, onClose, onLogin, onRegister, token, userRole, error }) => {
     return (
+        // Модальное окно, отображаемое в зависимости от наличия токена
         <Modal title={token ? 'Добавление пользователя' : 'Авторизация'} open={isVisible} onCancel={onClose} footer={null} width="400px">
             {token && userRole === 'Администратор' ? (
+                // Форма для добавления нового пользователя (доступна только администратору)
                 <Form name="registerForm" layout="vertical" onFinish={onRegister} autoComplete="off">
                     <Form.Item label="Полное имя" name="description" rules={[{ required: true, message: 'Пожалуйста, введите Полное имя!' }]}>
                         <Input />
@@ -22,16 +25,15 @@ const Auth = ({ isVisible, onClose, onLogin, onRegister, token, userRole, error 
                     <Form.Item label="Комментарий" name="comment">
                         <Input />
                     </Form.Item>
-                    <Alert style={{
-                        textAlign:"center"
-                    }}
-                    message="Пароль и роли пользователя задются в Центре мониторинга, после его создания" type="warning" />
+                    {/* Уведомление о том, что пароль и роли задаются в Центре мониторинга */}
+                    <Alert style={{ textAlign: "center" }} message="Пароль и роли пользователя задаются в Центре мониторинга, после его создания" type="warning" />
                     <br />
                     <Button type="primary" htmlType="submit" block>
                         Создать
                     </Button>
                 </Form>
             ) : (
+                // Форма для авторизации пользователя
                 <Form name="loginForm" layout="vertical" onFinish={onLogin} autoComplete="off">
                     <Form.Item label="Логин" name="username" rules={[{ required: true, message: 'Введите логин!' }]}> 
                         <Input prefix={<UserOutlined />} />
@@ -39,11 +41,10 @@ const Auth = ({ isVisible, onClose, onLogin, onRegister, token, userRole, error 
                     <Form.Item label="Пароль" name="password" rules={[{ required: true, message: 'Введите пароль!' }]}> 
                         <Input.Password prefix={<LockOutlined />} />
                     </Form.Item>
-                    {error?(
-                        <Alert message="Неправильный логин или пароль!" type="error" style={{
-                            marginBottom:"10px"
-                        }}/>
-                    ):(
+                    {/* Отображение ошибки авторизации, если она есть */}
+                    {error ? (
+                        <Alert message="Неправильный логин или пароль!" type="error" style={{ marginBottom: "10px" }} />
+                    ) : (
                         <div></div>
                     )}
                     <Button type="primary" htmlType="submit" block>
